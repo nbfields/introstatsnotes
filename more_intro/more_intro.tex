@@ -1,0 +1,181 @@
+%Preamble
+%---
+\documentclass{article}
+
+%packages
+%---
+\usepackage{amsmath} %Advanced math typesetting
+\usepackage[utf8]{inputenc} %Unicode support
+\usepackage{hyperref} %Add a link
+\usepackage{graphicx} %Add pictures
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{wasysym}
+\usepackage{listings}
+\usepackage{wasysym}
+\usepackage{systeme}
+
+\graphicspath{{./images/}}
+
+\hypersetup{colorlinks=true,
+      linkcolor=blue,
+      filecolor=magenta,
+      urlcolor=cyan,
+}
+\begin{document}
+  \begin{itemize}
+    \item Homework \#1 is up! Do it
+    \item Let $ X_1, \ldots, X_n $ have joint distribution $ F( \vec{x}; \theta) $
+    \item $ \theta $ is the unknown parameter
+    \item The unknown parameter generally goes on the right
+    \item Statistic used to estimate $ \theta $ is the estimator of  $ \theta $. Name checks out
+    \item Let's say $ N(\mu, \sigma^2) $,  $ \sigma^2 $ is known
+    \item Estimators for  $ \mu $:  $ \bar{x}, $ median
+    \item What if $ X \sim U (0, \theta) $?
+    \item So it has height  $ \frac{1}{\theta} $ everywhere that it isn't 0
+    \item How to estimate $ \theta $ after sampling it a bunch? We could do double the median or double the mean (both of which should be right about in the middle so twice that should get the endpoint), or the largest value we get from all our samples
+    \item If we get the biggest value we will be able to underestimate $ \theta $ but never overestimate it. That means selecting the biggest value is biased! OOOOH NOOOO
+    \item So that means that that one is possibly less good
+    \item Bias: Let  $ T $ be an estimator of  $ \theta $. The  \textbf{bias} of $ T $ is  $ E(T) - \theta $, where the bias is a function  of $ \theta $.
+    \item BIAS IS A FUNCTION OF $ \theta $! But we don't actually know the true value of $ \theta $ so that's lame
+    \item If $ E(T) = \theta $, then  $ T $ is unbiased
+    \item Unbiased estimators are the cool kids on the street
+    \item Example time!  $ X_1, \ldots, X_n,  $ IID with $ E(X_i) = \mu $. Show  $  \bar{x} $ is unbiased for $ \mu $. \\
+      Remember: Expectation of sum is sum of expecations
+      \[
+        E( \bar{x}) = E \left(\frac{1}{n} \sum_{i = 1}^{n} X_i \right) 
+      \]
+      \[
+        = \frac{1}{n} E \left( \sum_{i = 1}^{n} X_i \right)
+      \] 
+      \[
+        = \frac{1}{n} \left( \sum_{i = 1}^{n}\mu \right)
+      \] 
+      \[
+        = \frac{n \mu}{\mu}
+      \] 
+      \[
+        = \mu
+      \] 
+      Therefore $ \bar{x} $ is unbiased for $ \mu $
+    \item Now let's think about the variance of $ \bar{x} $!
+    \item The x guys are independent so the variance of the sum are the sum of the variances!
+      \[
+        V\left(\frac{1}{n} \sum_{i = 1}^{n} X_i\right) = \frac{1}{n^2} V\left( \sum_{i = 1}^{n} X_i \right)
+      \] 
+      \[
+        = \frac{n}{n^2} V(X_i) 
+      \] 
+      \[
+        = \frac{V(X_i)}{n}
+      \] 
+      \[
+        = \frac{ \sigma^2}{n}
+      \] 
+    \item Recall: $ V(x) = E\left( {(x - \mu)}^2\right) $
+    \item Therefore  $ V( \bar{x}) = E ( {(\bar{x} - \mu)}^2) $
+    \item Recall from waaaaaay back in teh olden dayz: Our sample variance is:
+      \[
+        S^2 =: \frac{1}{n - 1} \sum_{i = 1}^{n} {(x_i - \bar{x})}^2
+      \]  
+    \item A theorem! Let $ X_1, \ldots, X_n $ be IID, $ E(X_i) = \mu, V(X_i) = \sigma^2 $. Also:
+      \[
+        S^2 = \frac{1}{n - 1} \sum_{i = 1}^{n} {(x_i - \bar{x})}^2 
+      \]
+    \item Then $ S^2 $ is an unbiased estimator for $ \sigma^2 $.
+    \item Proooooof:
+      \[
+        \sum_{i = 1}^{n} {(x_i - \bar{x})}^2 = \sum_{i = 1}^{n}{(x_i - \mu + \mu - \bar{x})}^2
+      \] 
+      \[
+        = \sum_{i = 1}^{n}{((x_i - \mu) - ( \bar{x} + \mu))}^2
+      \] 
+      \[
+        = \sum_{i = 1}^{n}({(x_i - \mu)}^2 - 2( \bar{x} - \mu) (x_i - \mu) + {( \bar{x} - \mu)}^2)
+      \] 
+      \[
+        = \sum_{i = 1}^{n}{(x_i - \mu)}^2 - 2 ( \bar{x} - \mu) \sum_{i = 1}^{n} (x_i - \mu) + n{( \bar{x} - \mu)}^2
+      \] 
+      \[
+        = \sum_{i = 1}^{n} {(x_i - \mu)}^2 - 2 ( \bar{x} - \mu) n ( \bar{x} - \mu)  + n{( \bar{x} - \mu)}^2
+      \] 
+      \[
+        \sum_{i = 1}^{n} {(x_i - \mu)}^2 - n {(\bar{x} - \mu)}^2
+      \] 
+      Now let's take the expectation of that giant boi 
+      \[
+        E\left(  \sum_{i = 1}^{n} {(x_i - \mu)}^2) - E (n {( \bar{x} - \mu)}^2\right)
+      \] 
+      \[
+        = \sum_{i = 1}^{n} E\left({(x_i - \mu)}^2) - nE({( \bar{x} - \mu)}^2\right)
+      \]
+      Hey that first one is the variance
+      \[
+        = \sum_{i = 1}^{n} \sigma^2 - n \frac{\sigma^2}{n}
+      \] 
+      \[
+        = n\sigma^2 - \sigma^2
+      \] 
+      And so:
+      \[
+        E(S^2) = \frac{1}{n - 1} (n - 1) \sigma^2 = \sigma^2.~\square
+      \] 
+    \item That is our first fixed sample sized metric for how good our estimator is. In general, unbiased is good
+    \item But the only way to know for sure what the bias is, is to know the parameter, but you can get pretty good
+    \item Bias can be negative or positive
+    \item Note: Bias $ \approx $ accuracy
+    \item Standard deviation  $ \approx $ precision
+    \item A good estimator is both accurate and precise
+    \item Mean squared error! 
+       \[
+         \textnormal{Let } X_1, \ldots, X_n \textnormal{ have joint distribution} f( \vec{x}, \theta). \textnormal{ Let } T(X_1, \ldots, X_n) = T( \vec{x}) \textnormal{ be an estimator of } \theta.
+      \] 
+      \[
+        \textnormal{The mean squared error of T is } E( {(T - \theta)}^2).
+      \] 
+      \[
+        E({(T - \theta)}^2) = \int_{-\infty}^\infty \ldots \int_{-\infty}^{\infty} {(T(X) - \theta)}^2 f(\vec{x}; \theta)~dx_1 \ldots dx_\theta
+      \] 
+    \item But that's horrible so don't do that
+      \[
+        \textnormal{Let T be an estimator of } \theta, \textnormal{ where } \mu_T = E(T). \text{ Then } MSE(T) = V(T) + {(Bias(T))}^2
+      \] 
+      Proof:
+      \[
+        E({(T - \theta)}^2) = E({(T - \mu_T + \mu_T - \theta)}^2)
+      \] 
+      \[
+        = E({((T - \mu_T) + (\mu_T - \theta))}^2)
+      \] 
+      \[
+        = E( {(T - \mu_T)}^2) + 2E( (T - \mu_T) (\mu_T - \theta )) + E({(\mu_T - \theta)}^2)
+      \] 
+      \[
+        = V(T) + 2 (\mu_T + Bias(T)) + 2E ((T - \mu_T) (\mu_T - \theta))
+      \]
+      Consider that last term:
+      \[
+        2(\mu_T - \theta) (E(T) - \mu_T)
+      \] 
+      \[
+        2 (\mu_T - \theta) (E(T) - E(T)) = 0
+      \] 
+      This concludes the proof. $ \square $
+
+    \item All right, an example!
+      \[
+        \text{Let } X_1, \ldots, X_n \text{ be IID with } X_i\sim N(\mu, \sigma^2).~\mu \approx \bar{x}. \text{ Find MSE of } \bar{x}.
+      \] 
+    \item Well $ \bar{x} $ is unbiased so that goes to 0. In the formula the MSE is the bias + the variance so really it should just be the variance right? So the MSE is $ \sigma^2 $ I think.
+       \[
+         MSE( \bar{x}) = Bias {( \bar{x})}^2 + V( \bar{x})
+      \] 
+      \[
+        = V( \bar{x})
+      \] 
+      \[
+        = \frac{\sigma^2}{n}
+      \] 
+  \end{itemize}
+\end{document}

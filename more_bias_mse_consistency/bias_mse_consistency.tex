@@ -1,0 +1,141 @@
+%Preamble
+%---
+\documentclass{article}
+
+%packages
+%---
+\usepackage{amsmath} %Advanced math typesetting
+\usepackage[utf8]{inputenc} %Unicode support
+\usepackage{hyperref} %Add a link
+\usepackage{graphicx} %Add pictures
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{wasysym}
+\usepackage{listings}
+\usepackage{wasysym}
+\usepackage{systeme}
+
+\graphicspath{{./images/}}
+
+\hypersetup{colorlinks=true,
+      linkcolor=blue,
+      filecolor=magenta,
+      urlcolor=cyan,
+}
+\begin{document}
+  \begin{itemize}
+    \section*{Bias, MSE, Consistency}
+    \item Squishing things together into the mean squared error
+      \[
+        \text{ Bias: For estimator } \theta, Bias = E( \hat{\theta} ) - \theta
+      \] 
+      \[
+        \text{ If } Bias = 0, \hat{\theta} \text{ is unbiased for } \theta
+      \] 
+    \item IMPORTANT\@: Use $ \theta $ whatever that is. On HW that's  $ np(1 - p) $. Keep that in mind for work! Wooo 
+      \[
+        MSE( \hat{\theta}) = V( \hat{\theta})  + {(Bias( \hat{\theta}))}^2
+      \]
+      \[
+        \text{ Recall: } V(x) = E(x^2) - {(E(x))}^2
+      \]
+    \item Note: If you need $ E(x^2) $ and have  $ E(x), V(x), $ use the above!
+    \item Defn:
+      \[
+        \text{ Let } X_1, \ldots, X_n \text{ be a sample. The ordered sample is written } X_{(1)}, \ldots, X_{(n)}
+      \] 
+      \[
+        \text{ Known as order statistics }
+      \] 
+    \item If you estimate you gotta put a haaaaaaaat on it --- Beyonce, probably
+    \item Ex:
+      \\\\ Let $ X_1, \ldots, X_n $ be IID, $ U(0, \theta) $. Previously we picked estimators for $ \theta $ to be either:
+      \begin{itemize}
+        \item $ \max_(x_1, \ldots, x_n) = X_n$
+        \item $ 2 \bar{x} $
+      \end{itemize}
+      \begin{enumerate}
+        \item Find Bias, MSE for $ X_{(n)} $.
+          \\\\ Find CDF, PDF of $ X_{(n)} $.
+          \[
+            CDF: P(X_{(n)} \leq x) = P(X_1 \leq x \cap X_2 \leq x \cap \ldots \cap X_n \leq x)
+          \] 
+          \[
+            \prod_{i = 1}^{n} P(X_i \leq x)
+          \] 
+          \[
+            = \prod_{i = 1}^{n} \frac{x}{\theta}
+          \] 
+          \[
+            = \frac{x^n}{\theta^n}
+          \] 
+          Therefore, $ \frac{x^n}{\theta^n} $ is the CDF of $ X_{(n)} $. Now for PDF via derivative:
+          \[
+            f{x_{(n)}}(x) = \frac{nx^{n - 1}}{\theta^n}I_{(0, \theta)}(x)
+          \] 
+          Now we can find the bias!
+          \[
+            Bias(X_{(n)}) = E(X_{(n)}) - \theta
+          \]
+          \[
+            E(X_{(n)}) = \int_0^\theta x \frac{nx^{n-1}}{\theta^n}~dx
+          \] 
+          \[
+            = \int_0^\theta \frac{nx^n}{\theta^n}~dx
+          \] 
+          \[
+            = \left. \frac{nx^{n + 1}}{(n + 1)\theta^n} \right|_0^\theta
+          \] 
+          \[
+            = \frac{n\theta}{n + 1}
+          \] 
+          \[
+            \Rightarrow Bias = \frac{n}{n + 1} \theta - \theta = \theta \left( \frac{n}{n + 1} - \frac{n + 1}{n + 1}\right)
+          \] 
+          \[
+            \Rightarrow Bias = -\frac{\theta}{n + 1}
+          \]
+          Does that make sense? Yeah. We expected underestimation $ \Rightarrow $ negative bias. That seems about right so yay. \\\\
+          Now for MSE:
+          \[
+            V(X_{(n)}) = E\left(X_{(n)}^2\right) - E{\left(X_{(n)}\right)}^2
+          \] 
+          \[
+            E(X_{(n)}^2) = \int_0^\theta x^2 \frac{nx^{n - 1}}{\theta^n}~dx
+          \]
+          Some calculus later:
+          \[
+            E(X_{(n)}^2) = \frac{n}{n + 2} \theta^2
+          \] 
+          And the rest is algebra
+          So:
+          \[
+          V(X_{(n)}) = \frac{n}{n + 2} \theta^2 - {\left(\frac{n}{n + 1} \theta \right)}^2
+          \] 
+          \[
+            \Rightarrow MSE(X_{(n)}) = \left( \frac{-\theta}{n + 1}\right)^2 + \frac{n}{n + 2} \theta^2 - \frac{n^2 \theta^2}{(n + 1)^2}
+          \] 
+          That's bias squared - variance \\
+          \ldots Algebra occurs \ldots \\
+          \[
+            = \frac{2 \theta^2}{(n + 1) (n + 2)}
+          \] 
+        \item Example yall: Find MSE for $ 2 \bar{x} $ estimating $ \theta $ for  $ X_1, \ldots, X_n, $ IID $ U(0, \theta) $
+          (done by hand)
+          \\\\ You get $ \frac{\theta^2}{3n} $ \\\\
+          So what's better? max or double $ \bar{x} $? The max actually, because it has $ n^2 $ in the denominator. Even though $ \bar{x} $ is unbiased.
+      \end{enumerate}
+    \item So what makes one estimator dood uniformly better than another?
+    \item Defn:
+      \[
+        \text{ Let } T_1, T_2 \text{ be estimators for } \theta. \text{ If } \forall_\theta, MSE(T_1) \leq MSE(T_2), 
+      \] 
+      \[
+        \text{ and } \exists_\theta, MSE(T_1) \leq MSE(T_2), T_1 \text{ is uniformly better than }T_2.
+      \] 
+    \item if $ T $ is uniformly best estimator of  $ \theta $ then  $ \forall_{\theta} MSE(T) = 0  $.
+    \item Ex: Uniform between $ \theta, \theta + 1 $
+    \item Next time: Uniformly minimum variance unbiased estimators
+  \end{itemize}
+\end{document}

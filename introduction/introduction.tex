@@ -1,0 +1,88 @@
+%Preamble
+%---
+\documentclass{article}
+
+%packages
+%---
+\usepackage{amsmath} %Advanced math typesetting
+\usepackage[utf8]{inputenc} %Unicode support
+\usepackage{hyperref} %Add a link
+\usepackage{graphicx} %Add pictures
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{wasysym}
+\usepackage{listings}
+\usepackage{wasysym}
+\usepackage{systeme}
+
+\graphicspath{{./images/}}
+
+\hypersetup{colorlinks=true,
+      linkcolor=blue,
+      filecolor=magenta,
+      urlcolor=cyan,
+}
+\begin{document}
+  \begin{itemize}
+    \item The theory behind (some of) the stuff we covered in Prob Stats,
+    \item Estimators (statistics) --- best guess for a population parameter
+    \item In probability we assumed we had $ \mu, \sigma $. But what if we don't?
+    \item And what are the distributions of these boyos?
+    \item What's the distribution of $ \bar{x} $? $ \bar{x}^2 $?
+    \item So use the estimators, distributions to do hypothesis testing and create conf.~intervals
+    \item 1st half of this course is the hard part, then it gets easier for some reason
+    \item Squiggle boi
+    \item What is statistical modeling? Why do we care?
+    \item The scenario: Measure the distance from your home to Bunker
+    \item How? Ruler, car's odometer, Google Maps
+    \item How many times? Measure just once? Several times?
+    \item Let  $ \mu =: $ true distance
+    \item n measurements,  $ x_1, \ldots, x_n $
+    \item Does $ x_i = \mu $ all the time? Nope. $ x_i = \mu + \epsilon_i $, where $ \epsilon_i $ is some error term
+    \item Probably not always positive or always negative, generally some of both, unless the system is biased
+    \item ASSUMPTIONSZ about $ \epsilon_i $:
+       \begin{enumerate}
+         \item Errors have mean 0
+         \item Errors are independent
+         \item Errors are symmetric about the mean
+         \item All errors have the same variance
+      \end{enumerate}
+    \item Let's make a model! Assume $ \epsilon_1, \ldots, \epsilon_n $ are independent, distributed $ N(0, 1) $
+    \item Question\@: What is the distribution of the  $ x_i $s? They're normal! That's because you are just adding a const $ \mu $ to  $ N(0, 1) $
+    \item So what's  $ E(x_i), V(x_i) $?
+    \item  $ E(x_i) = E(\mu + \epsilon_i) = \mu + E(\epsilon_i) = \mu + 0 = \mu $
+    \item  $ V(x_i) = V(\mu + \epsilon_i) = V(\epsilon_i) = 1 $
+    \item  $ \Rightarrow x_1, \ldots, x_n $  are IID $ N(\mu, 1) $
+    \item We have two different sets of RVs. The  $ x $s,  $ x_1, \ldots, x_n $ are the observables, the measurements, the guys, the those dudes
+    \item Also RVs in terms of the $ \epsilon $s,  $ \epsilon_1, \ldots, \epsilon_n, $ and they're unobservable
+    \item $ \mu $ is an unknown parameter, let's estimate it
+    \item What we need to know:  ``best'' estimator for $ \mu $?  $ \bar{x} $, maybe the mean?
+    \item Estimator = best guess for the parameter
+    \item An estimator is just a statistic
+    \item Recaaaaaaaall: What's the CDF\@? It's the probability that an RV  $ X \leq x $ for some value of $ x, F(x) = P(X \leq x) $
+    \item For jointly distributed RVs: $ F(X_1, \ldots, X_n) = P(X_1 \leq x_1 \cap \ldots \cap X_n \leq x_n) $
+    \item Big ol cappy boi. It's an intersection
+    \item The latter part of 334 is looking at dependent RVs and stuff
+    \item But that's not what we'll be doing. We're dealing with independent boyos only! It's not too unreasonable to assume samples are IID
+    \item $ P(A \cup B) = P(A) + P(B) - P(A \cap B) $. This is always true
+    \item If $ A, B $ are independent, then  $ P(A \cap B) = P(A) P(B) $
+    \item Joint  CDF is much easier to compute if they're IID 
+    \item If independent, joint CDF is $  \prod_{i = 1}^{n} F(x_i) $
+    \item Paaaaarmetric Moooodeeeeeeeeeelz:
+    \item Let $ M $ be a model for  $ x_1, \ldots, x_n $. If all CDFs of $ M $ can be gotten by varying one or more params, then  $ M $ is a parametric model
+    \item Let  $ M $ be a parametric model, param  $ \theta $. Set of all possible values for  $ \theta =: $ the parameter space
+    \item Where is your parameter allowed to exist such that a PDF or PMF exists? Anywhere such that it integrates to 1, and there is no point that the function is less than 0 on $ (-\infty, \infty) $ 
+    \item Ex: $ x \sim Bin(n, p), n $ is known,  $ p $ is probability of success  $ 0 \leq p \leq 1 $
+    \item  $ X \sim Poisson(\lambda) $, exists if  $ \lambda > 0 $
+    \item Statistic: Something that describes the data. A single point. A function of observable  RV (data) where it does not depend on any unknown params
+      \begin{enumerate}
+        \item $ \bar{X} $: Yep, a statistic
+        \item $ s^2 = \frac{1}{n - 1} \sum_{i = 1}^{n} {(x_i - \bar{x})}^2$ Yep
+        \item $ \sigma^2 $ Nope, you can't get it from only a sample, we don't know $ \sigma $
+        \item $  \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}} $ Nope, we don't have $ \mu $ or $ \sigma $
+        \item Min and max of the $ X $ guys? Yep, a statistic
+        
+      \end{enumerate}
+  \end{itemize}
+ \end{document}
