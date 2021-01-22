@@ -1,0 +1,235 @@
+%Preamble
+%---
+\documentclass{article}
+
+%packages
+%---
+\usepackage{amsmath} %Advanced math typesetting
+\usepackage[utf8]{inputenc} %Unicode support
+\usepackage{hyperref} %Add a link
+\usepackage{graphicx} %Add pictures
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{wasysym}
+\usepackage{listings}
+\usepackage{wasysym}
+\usepackage{systeme}
+
+\graphicspath{{./images/}}
+
+\hypersetup{colorlinks=true,
+      linkcolor=blue,
+      filecolor=magenta,
+      urlcolor=cyan,
+}
+\begin{document}
+  \begin{itemize}
+    \item Office hours friday moved to 2 to 3
+    \item HW \#1 due tomoooorroooooow
+    \item HW2 posted tomorrow too, due in one weeeek
+    \item And now for the important stuff
+    \item Is it possible for there to be a uniformly best estimator? Not really, no. Unbiased vs smallest MSE matters. Uniformly best would pick the parameter with probability 1 but that is rather pointless
+    \item Defn:
+      \[
+        \text{ Let } T \text{ be an unbiased estimator of } \theta. \text{ If, for every unbiased estimator  } S \text{ of } \theta, 
+      \] 
+      \[
+        V(T) \leq V(S), \text{ and } V(T) < V(S) \text{ for some } \theta,
+      \]
+      \[\text{ then } T \text{ is the uniformly minimum variance unbiased estimator. }  
+      \] 
+    \item UMVUEs exist, but some biased estimators have a smaller MSE, and there is no good algorithm to find them
+    \item So, what happens to estimator as sample size $ n \rightarrow \infty $?
+    \item Defn:
+      \[
+        \text{ Let } X_1, \ldots, X_n \text{ be IID\@. For each } n, \text{ let } \hat{\theta}_n (X_1, \ldots, X_n)
+      \] 
+      \[
+        \text{ be an estimator of } \theta. \text{ Then, } \hat{\theta}_1, \hat{\theta}_2, \ldots, 
+      \] 
+      \[
+        \text{ is a sequence of estimators for } \theta.
+      \] 
+    \item Ex for $ \bar{x} $: $ X_1, \frac{X_1 + X_2}{2}, \ldots, \frac{X_1 + \cdots + X_n}{n} $
+    \item Defn:
+      \[
+        \text{ Let } X_1, \ldots, X_n \text{ be IID\@. Let } \hat{\theta}_n \text{ be a sequence of estimators. }
+      \] 
+      \[
+        \text{ The estimator sequence } \hat{\theta}_n \text{ is consistent for } \theta \text{ if }
+      \] \[
+        \forall_\theta \text{ in the parameter space }, \hat{\theta}_n \rightarrow \theta.
+      \] 
+    \item Imagine there's a p over that arrow, that is there sometimes
+    \item Another way to put it:
+      \[
+        \forall \epsilon > 0, \lim_{n \to \infty} P\left( \left| \hat{\theta}_n \right| > \epsilon\right) = 0
+      \] 
+      \[
+        \lim_{n \to \infty} P\left( \left| \hat{\theta}_n \right| < \epsilon\right) = 1
+      \]
+    \item In english: For any number $ \epsilon $, no matter how small, if you go far enough down the $ \hat{\theta}_n $ sequence you'll find some $ \hat{\theta}_n $s that are guaranteed to be within $ \epsilon $-distance of $ \theta $. Even if $ \epsilon $ is $ \frac{1}{TREE(G(64))} $ or something crazy
+    \item Can biased estimators be consistent? Yep! But most consistent estimators we will use are unbiased
+    \item Some examples!!!!!!!!!!!!!!
+      \[
+        \text{ Let } Z_1, \ldots, \text{ be IID, } U(0, 1). \text{ For each } n, y_{(n)} = \max(Z_1, \ldots, Z_n).
+      \] 
+      \[
+        \text{ Show } y_{(n)} \text{ is consistent for 1. }
+      \] 
+      Proof: Show:
+      \[
+        \lim_{n \to \infty} P\left( \left|y_{(n)} - 1 \right| \right) = 1
+      \] 
+      Let $ \epsilon = 0 $, fix $ n $.
+       \[
+         P \left( \left| y_{(n)} - 1 \right| < \epsilon \right) = P \left( 1 - y_{(n)} < \epsilon \right)
+      \] 
+      \[
+        = P(y_{(n)} > 1 - \epsilon)
+      \] 
+      \[
+        = 1 - P (y_{(n)} < 1 - \epsilon)
+      \] 
+      \[
+        = 1 - \prod_{i = 1}^{n} P(Z_i < 1 - \epsilon)
+      \]
+      \[
+        = 1 - \prod_{i = 1}^{n} (1 - \epsilon) = 1 - {(1 - \epsilon)}^n
+      \] 
+      Now let's do the limit.
+      \[
+        \lim_{n \to \infty} 1 - {(1 - \epsilon)}^n = 1 - 0 = 1
+      \] 
+      That's what was wanted! Yay! Happy check mark! (how do i write a check mark in LaTeX\@? lol)
+    \item That's brute force consistency. But there's better ways
+    \item Theorem: 
+      \[
+        \text{ The Weak Law of Large Numbers (WLLNS): }
+      \] 
+      \[
+        \text{ Let } X_1, \ldots, \text{ be IID, with } E(X_i) = \mu.
+      \] \[
+        \text{ For each positive integer } n,  \text{ let } \bar{x} = \frac{X_1 + \cdots + X_n}{n}
+      \] \[
+      \text{ Then } \bar{x} \rightarrow \mu, \text{ that is, } \lim_{n \to \infty} P( \left| \bar{x}_n - \mu \right| > \epsilon) = 0
+      \] 
+    \item Another one:
+      \[
+        \text{ Markov's Inequality: }
+      \] 
+      \[
+        \text{ If } X \text{ is a nonnegative RV, then }
+      \] \[
+      \forall A > 0, P(X \geq A) \leq \frac{E(x)}{a}.
+      \]
+    \item That one puts a bound on our expectation value. We learned that one a while ago, I've got the proof in here somewhere
+    \item Proof of WLLNs:
+      \[
+        \forall \epsilon > 0, P( \left| \bar{x}_n - \mu \right| > \epsilon) 
+      \] 
+      We shall now drop the n from $ \bar{x}_n $ for expediency but assume it's there
+      \[
+        = P ( {( \bar{x} - \mu)}^2 > \epsilon^2)
+      \] \[
+        \text{ which, by Markov's Inequality, }
+      \] \[
+      \leq \frac{E({( \bar{x} - \mu)}^2) }{\epsilon^2}
+      \] 
+      Hey the numerator is $ V( \bar{x}) $! And $ V( \bar{x}) = \frac{\sigma^2}{n} $ So we have:
+      \[
+        \frac{\sigma^2}{n \epsilon^2}
+      \] 
+      And now evaluate the limit:
+      \[
+        \lim_{n \to \infty} \frac{\sigma^2}{n \epsilon^2} = 0
+      \] \[
+        \text{ Therefore, } \bar{x} \text{ is consistent for } \mu. \square
+      \] 
+    \item But what about mean squared error?
+    \item A theorem!!!!
+      \[
+        \text{ Let } \hat{\theta}_n \text{ be a sequence of estimators of parameter } \theta.
+      \] \[
+      \text{ If } \forall_\theta \lim_{n \to \infty} MSE( \hat{\theta}_n) = 0, \text{ then  } \hat{\theta}_n \text{ is consistent for } \theta.
+      \] 
+      \[
+        \text{ Proof: }
+      \] \[
+      \text{ Let } \epsilon > 0. P\left( \left| \hat{\theta}_n - \theta \right| > \epsilon\right)
+      \] 
+      \[
+        = P( ( \hat{\theta}_n - \theta)^2 > \epsilon^2)
+      \] 
+      Dropping the ns from that $ \hat{\theta} $s now
+      \[
+        \leq \frac{E( (\hat{\theta} - \theta)^2)}{\epsilon^2} = \frac{MSE ( \hat{\theta})}{\epsilon^2}
+      \]
+      Now take limit:
+      \[
+        \lim_{n \to \infty} \frac{MSE ( \hat{\theta})}{\epsilon^2}   = \frac{0}{\epsilon^2} = 0
+      \] 
+    \item Use the above for consistency proofs most of the time. It's easier
+    \item Now another theorem
+      \[
+        \text{ Let } \hat{\theta} \text{ be a consistent estimtator of } \theta.
+      \] \[
+      \text{ Let } g \text{ be a continuous function. Then,  } g( \hat{\theta}) \text{ is consistent for } g(\theta).
+      \] Proof is in the class notes
+    \item Another one!
+      \[
+        \text{ Let } \hat{\theta} \text{ be consistent for } \theta, \hat{\tau} \text{ be consistent for } \tau.
+      \] \[
+      \text{ Let } g \text{ be a continuous function of two variables. Then, } g( \hat{\theta}, \hat{\tau}) \text{ is consistent for } g( \theta, \tau).
+      \] 
+      \[
+        \text{ Special case: } \hat{\theta} + \hat{\tau} \text{ is consistent for } \theta + \tau
+      \] 
+      \[
+        \text{ Also } \hat{\theta} \times \hat{\tau} \text{ consistent for } \theta \times \tau, \frac{ \hat{\theta}}{ \hat{\tau}} \text{ consistent for } \frac{\theta}{\tau}
+      \]
+    \item Mead! Another!
+      \[
+        \text{ Let } x_1, \ldots, \text{ be IID, mean } \mu, \text{ variance } \sigma^2.
+      \] \[
+      \text{ Let } S^2 = \frac{1}{n - 1} \sum_{i = 1}^{n} (X_i - \bar{x})^2
+      \] \[
+        \text{ Then } S^2 \text{ is consistent for } \sigma^2.
+      \] \[
+        \text{ Proof: }
+      \] \[
+        S^2 = \frac{ \sum_{i = 1}^{n} X_i^2}{n - 1} - \frac{n \bar{x}^2}{n - 1}
+      \] \[
+        = \frac{n}{n - 1} \frac{ \sum_{i = 1}^{n} x_i^2}{n} - \frac{n}{n - 1} \bar{x}^2
+      \] 
+      \[
+        \text{ Since } \bar{x} \rightarrow \mu \text{ by WLLN, } \bar{x}^2 \rightarrow \mu^2. \text{ So: }
+      \] 
+      \[
+        \lim_{n \to \infty} \frac{n}{n - 1} \bar{x}^2 = \mu^2 \text{ (solve the ns and it goes to 1) }
+      \] 
+      \[
+        \text{ Now: } \frac{ \sum_{i = 1}^{n} X_i^2}{n}, \text{ which is an ugly sample mean. It's not } \bar{x}.
+      \] \[
+        \text{ But it is an average of the squares. Like Silence of the Lambs, but Average of the Squares }
+      \] \[
+      \text{ It converges to } E(X^2)
+      \] \[
+      = V(X) + E{(X)}^2
+      \] \[
+        = \sigma^2 + \mu^2
+      \] 
+      \[
+        \Rightarrow \lim_{n \to \infty} \frac{n}{n - 1} \frac{ \sum_{i = 1}^{n} X_i^2}{n} = \sigma^2 + \mu^2
+      \] 
+      \[
+        \text{ Thus we have: }
+      \] \[
+        \sigma^2 + \mu^2 - \mu^2 = \sigma^2
+      \] 
+      \[
+        \text{ This concludes the proof. We now have } S^2 \rightarrow \sigma^2. \square
+      \] 
+  \end{itemize}
+\end{document}
